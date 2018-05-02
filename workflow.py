@@ -109,27 +109,27 @@ for batch in batches: # Måske batch bare skal hedde b ?
 	dico_names = get_filenames(individuals, batch['rel_individual_genomes'])
 
 	# 0: initialize
-	#gwf.target_from_template(batch['title']+'_0_initialize', initialize(batch['title'], json.dumps(batch, sort_keys=False, indent=4)))
+	gwf.target_from_template(batch['title']+'_0_initialize', initialize(batch['title'], json.dumps(batch, sort_keys=False, indent=4)))
 
 	# 1: index
-	#gwf.target_from_template(batch['title'] + '_1_index', index_genome(batch['title'], batch['rel_reference']))
+	gwf.target_from_template(batch['title'] + '_1_index', index_genome(batch['title'], batch['rel_reference']))
 
 	for individual in dico_names:
 		BAM_files=[] # for collecting BAM-files later.
 		for num, pair in enumerate(dico_names[individual]):
 			# 2: Mapping
-			#gwf.target_from_template(batch['title'] + '_2_map_'+individual+str(num), bwa_map_pe(batch['title'], batch['rel_reference'], batch['abs_genome_dir']+pair[0], batch['abs_genome_dir']+pair[1], individual+str(num)))
+			gwf.target_from_template(batch['title'] + '_2_map_'+individual+str(num), bwa_map_pe(batch['title'], batch['rel_reference'], batch['abs_genome_dir']+pair[0], batch['abs_genome_dir']+pair[1], individual+str(num)))
 			BAM_files.append(individual+str(num)+'_sort_dedup.bam') # collect the filenames for use in the merge point
 		#print('BAM_files:', BAM_files)
 
 		# 3: Merging the bam files # merge the bam-files for each individual
-		#gwf.target_from_template(batch['title'] + '_3_Merge_BAMS_' + individual, merge_bams_new(batch['title'], individual = individual, infiles = BAM_files, outfile = individual+'_merged.bam', input = individual+str(num) + '_sort_dedup.bam')) # denne bruges jo ikke??
+		gwf.target_from_template(batch['title'] + '_3_Merge_BAMS_' + individual, merge_bams_new(batch['title'], individual = individual, infiles = BAM_files, outfile = individual+'_merged.bam', input = individual+str(num) + '_sort_dedup.bam')) # denne bruges jo ikke??
 
 		# 4: Filtering the reads	# I think this is about the quality? like - removing bad quality reads?
-		#gwf.target_from_template(batch['title'] + '_4_filter_bam'+individual, filter_bam_file(batch['title'], individual))
+		gwf.target_from_template(batch['title'] + '_4_filter_bam'+individual, filter_bam_file(batch['title'], individual))
 
 		# 5: Get coverage for each individual
-		#gwf.target_from_template(batch['title'] + '_5_get_coverage'+individual, get_coverage(batch['title'], individual))
+		gwf.target_from_template(batch['title'] + '_5_get_coverage'+individual, get_coverage(batch['title'], individual))
 
 		# 6: Calculate CNV
 		gwf.target_from_template(batch['title'] + '_6_calc_cnv' + individual, get_cnv(batch['title'], individual, batch['chromosome']))
