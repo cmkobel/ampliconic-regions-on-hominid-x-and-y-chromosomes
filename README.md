@@ -13,6 +13,6 @@ The files `workflow.py` `workflow_templates.py` depends on [gwf-org](http://gwf.
 
 The plots are output to `plots/plots`.
 
-The difference between `plots` and `plots_human_ac` is that in the first a species specific artificial chromosome is used as reference for mapping, and in the latter an artifical chromosome based on human genes is used.
+The difference between `plots` and `plots_human_ac` is that in the first; a species specific artificial chromosome is used as reference for mapping, and in the latter an artifical chromosome based on human genes is used.
 
 
