@@ -1,5 +1,5 @@
 ### Bachelorproject:
-# Ampliconic Regions on Hominid X and Y chromosomes
+# Copy Number Variation of Ampliconic Regions on Hominid X and Y chromosomes
 
 All resources are collected at one spot here on GitHub.
 
