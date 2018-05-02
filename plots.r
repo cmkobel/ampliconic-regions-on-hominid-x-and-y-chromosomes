@@ -1,7 +1,7 @@
 library(readr)
 library(tidyverse)
 
-df <- read_csv("plots/full.csv")
+df <- read_csv("full.csv")
 View(df)
 
 
@@ -34,7 +34,7 @@ ychr_normalized <- df[df$chrom == 'Y',] %>%
 
 
 #boxplot
-pdf("x_all_box.pdf")
+png("x_all_box.png")
 ggplot(xchr_normalized, aes(x=gene, y=normalized)) + 
   geom_boxplot() + 
   ggtitle("X chr: Distribution of ampliconic region copy number among 12 hominids") + 
@@ -43,18 +43,18 @@ ggplot(xchr_normalized, aes(x=gene, y=normalized)) +
 dev.off()
 
 #bar
-pdf("x_all_bar.pdf")
+png("x_all_bar.png")
 ggplot(xchr_normalized, aes(x=gene, y=normalized, color=sex)) + 
   geom_bar(stat="identity") + 
   facet_wrap(~ ind+species) + 
   ggtitle("X chr: Ampliconic region copy number among 12 hominids") + 
   labs(y="median copy number (normalized to DMD)", x="ampliconic region id") +
-  theme(title= element_text(size=12), axis.text.x = element_text(angle=90, hjust=1, size=3)) 
+  theme(title= element_text(size=12), axis.text.x = element_text(angle=90, hjust=1)) #size=3 for human ac
 dev.off()
 
 #inds
 for (i in unique(xchr_normalized$gene)) {
-  pdf(paste("x_gene_", i, ".pdf", sep=""))
+  png(paste("x_gene_", i, ".png", sep=""))
   print(
     ggplot(xchr_normalized[xchr_normalized$gene==i,], aes(reorder(ind, normalized), y=normalized, fill=species)) +
       theme_bw() +
@@ -72,7 +72,7 @@ for (i in unique(xchr_normalized$gene)) {
 ################################### Y
 
 #boxplot
-pdf("y_all_box.pdf")
+png("y_all_box.png")
 ggplot(ychr_normalized, aes(x=gene, y=normalized)) + 
 #  theme_bw() +
   geom_boxplot() + 
@@ -82,7 +82,7 @@ ggplot(ychr_normalized, aes(x=gene, y=normalized)) +
 dev.off()
 
 #bar
-pdf("y_all_bar.pdf")
+png("y_all_bar.png")
 ggplot(ychr_normalized, aes(x=gene, y=normalized, color=sex)) + 
   geom_bar(stat="identity") + 
   facet_wrap(~ ind+species) + 
@@ -94,7 +94,7 @@ dev.off()
 
 #inds
 for (i in unique(ychr_normalized$gene)) {
-  pdf(paste("y_gene_", i, ".pdf", sep=""))
+  png(paste("y_gene_", i, ".png", sep=""))
   print(
     ggplot(ychr_normalized[ychr_normalized$gene==i,], aes(reorder(ind, normalized), y=normalized, fill=species)) +
       theme_bw() +
