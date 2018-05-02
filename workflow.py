@@ -5,6 +5,7 @@ The reads are mapped with BWA and and filtered.
 The coverage for each gene is calculated are compared 
 for each IND.
 
+
 Author: CMK (heavily inspired from Elise Lucotte and Laurits Skov)
 Date: may. 2018 
 
