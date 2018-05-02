@@ -3,11 +3,20 @@ from os.path import isfile, join
 import json
 import pandas as pd
 
-# This file is to be run locally.
-# As there are no heavy computations.
-# it only merges. the normalization is done in the plots.R script.
 
-# download all <chrom>_<ind>_cn_median.csv files and put them aside this file.
+# Please make sure this is done before the script is run:
+'''
+# create 'plots' folder
+#!/bash
+mkdir plots
+# mv cn_medians files
+#!/bash
+cp batch_x6_chimp/cn_medians/*csv plots
+cp batch_x6.3_gorilla/cn_medians/*csv plots
+cp batch_y6.2_chimp/cn_medians/*csv plots
+'''
+
+
 
 
 
@@ -16,7 +25,7 @@ def build_meta_dict():
 	content = {}
 	# Here we open the sample_info.txt file containing all the individual across species and sexes.
 	# We then build a dictionary, that we can later use to fill a complete dataframe with all results.
-	with open('sample_info.txt', 'r') as file:
+	with open('sample_info_all.txt', 'r') as file:
 		lines = [line.strip().split('\t') for line in file][1:]
 		for line in lines:
 
@@ -30,15 +39,16 @@ def build_meta_dict():
 
 meta_data = build_meta_dict()
 
+wd = 'plots/'
 
 frame = pd.DataFrame()
-for file in [f for f in listdir('.') if isfile(join('.', f))]:
-	if file[0:2] != 'x_' and file[0:2] != 'y_': continue # pass this iteration
+for file in [f for f in listdir(wd) if isfile(join(wd, f))]: # for each file in the dir
+	if file[0:2] != 'x_' and file[0:2] != 'y_': continue # skip files that don't start with either 'x_' or 'y_' pass this iteration
 	chrom = file[0:1].upper()
 
-	#print(file)
+	print(file)
 
-	data = pd.read_csv(file, sep='\t', engine='python').rename(columns={'name': 'gene'}) # read
+	data = pd.read_csv(wd+file, sep='\t', engine='python').rename(columns={'name': 'gene'}) # read
 				
 	data['gene'] = data['gene'].str.replace(r'ampliconic_region', '').astype('str') # rename values
 
@@ -62,4 +72,6 @@ frame = frame[['ind', 'species', 'sex', 'chrom', 'gene', 'pos', 'count']]
 
 print(frame.reset_index())
 
-frame.reset_index(drop = True).to_csv('full.csv')
+
+
+frame.reset_index(drop = True).to_csv('plots/full.csv')
