@@ -1,9 +1,8 @@
 library(readr)
 library(tidyverse)
-df <- read_csv("~/Biologi/Bachelorprojekt/cnv/full.csv")
-#View(df)
 
-setwd("/Users/reasonable/Biologi/Bachelorprojekt/cnv/plots")
+df <- read_csv("plots/full.csv")
+View(df)
 
 
 # All values should be normalized in regard to:
@@ -11,8 +10,19 @@ setwd("/Users/reasonable/Biologi/Bachelorprojekt/cnv/plots")
 #   chrY.background for the Y chromosome
 ##Yes :)
 
+# old version (human ac's)
+# xchr_normalized <- df[df$chrom == 'X' & df$gene != "21_0",] %>%
+#   group_by(ind) %>%
+#   mutate(normalized = count / df[df$gene == "DMD" & df$ind == ind,]$count)
+# #View(xchr_normalized)
+# 
+# ychr_normalized <- df[df$chrom == 'Y',] %>%
+#   group_by(ind) %>%
+#   mutate(normalized = count / df[df$gene =="chrY.background" & df$ind == ind,]$count)
 
-xchr_normalized <- df[df$chrom == 'X' & df$gene != "21_0",] %>%
+
+# New version species specific ac's
+xchr_normalized <- df[df$chrom == 'X',] %>%
   group_by(ind) %>%
   mutate(normalized = count / df[df$gene == "DMD" & df$ind == ind,]$count)
 #View(xchr_normalized)
@@ -20,11 +30,6 @@ xchr_normalized <- df[df$chrom == 'X' & df$gene != "21_0",] %>%
 ychr_normalized <- df[df$chrom == 'Y',] %>%
   group_by(ind) %>%
   mutate(normalized = count / df[df$gene =="chrY.background" & df$ind == ind,]$count)
-
-#View(df[df$gene=="DBY",])
-#View(ychr_normalized[ychr_normalized$gene == "DBY",])
-
-# merged ed.
 
 
 
