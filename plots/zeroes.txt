@@ -1,0 +1,33 @@
+List of genes in acs
+----------------------------------
+
+ac_chimp_x.fa | Carl Carolina Frits Simliki
+>OPN1LW
+>DMD
+>CT47A4
+>GAGE4
+>SPANXB1
+>CT45A5
+	TJEK
+
+
+ac_chimp_y.fa | Carl Carolina Frits Simliki
+>AMELY
+>BPY2
+>CDY
+>PRY
+>RBMY1A1
+>TSPY
+	TJEK
+
+
+ac_gorilla_x.fa | Banjo Mawenzi Mutasi Mimi
+>DMD
+>CT45A5
+>CT47A4
+>GAGE4
+>OPN1LW
+
+
+orangutan: not included
+Masala Moni Suma Buschi
