@@ -1,7 +1,7 @@
 library(readr)
 library(tidyverse)
-
-df <- read_csv("full.csv")
+#setwd("plots")
+df <- read_csv("full.csv")[,-1]
 View(df)
 
 
@@ -31,7 +31,7 @@ ychr_normalized <- df[df$chrom == 'Y',] %>%
   group_by(ind) %>%
   mutate(normalized = count / df[df$gene =="AMELY" & df$ind == ind,]$count)
 
-
+#setwd("png")
 
 #boxplot
 png("x_all_box.png")
