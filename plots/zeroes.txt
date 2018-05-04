@@ -27,6 +27,7 @@ ac_gorilla_x.fa | Banjo Mawenzi Mutasi Mimi
 >CT47A4
 >GAGE4
 >OPN1LW
+	TJEK
 
 
 orangutan: not included

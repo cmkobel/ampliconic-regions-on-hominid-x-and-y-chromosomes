@@ -41,18 +41,18 @@ setwd("png2")
 # del ind plotsene op i chromosom (så det er de samme gener sammen)
 
 
-# chrom species
+# chrom species # jeg kan åbenbart ikke få lov til at wrappe.
 for(ichrom in unique(df$chrom)) {
     for (ispecies in unique(df$species)) {
         ggplot(df[df$chrom==ichrom & df$species==ispecies,], aes(x=gene, y=norm_count, color=sex)) +
             #geom_point(size=3) +
             geom_jitter(width=0.15, height=0.00) +
-            #facet_wrap(~ species) + 
+            #facet_wrap(~ ind) + 
             #scale_y_continuous(limits = c(0,max(df$))) +
             ggtitle(paste(ichrom, ": ", expand_species(ispecies), sep="")) +
             labs(y=paste("number of copies"), x="gene") +
             theme(axis.text.x = element_text(angle=90, hjust=1)) 
-        ggplot2::ggsave(paste(ichrom, "_species_", ispecies, ".png", sep=""), width=3, height=4)
+        ggplot2::ggsave(paste(ichrom, "_speciesW_", ispecies, ".png", sep=""), width=3, height=4)
         print(ispecies)
         #print(get_non_amp_reg(ichrom))
     }
