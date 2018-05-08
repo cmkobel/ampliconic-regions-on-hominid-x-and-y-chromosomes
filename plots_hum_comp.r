@@ -1,6 +1,6 @@
 library(readr)
 library(tidyverse)
-setwd("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots/png2")
+setwd("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots/pdf2")
 
 # X
 x_human <- read_delim("../compare_human/x_human_coverage_all_AR_corr.tsv",
@@ -32,7 +32,7 @@ for (igene in c("GAGE4", "CT47A4", "CT45A5", "SPANXB1", "OPN1LW", "DMD")) {
         #scale_y_continuous(limits = c(0,max(df$))) +
         ggtitle(paste("X: ", igene, sep="")) +
         labs(y=paste("number of copies"), x="species")
-    ggplot2::ggsave(paste("X_human_", igene, "_jitter.png", sep=""), width=2, height=4)
+    ggplot2::ggsave(paste("X_human_", igene, "_jit.pdf", sep=""), width=2, height=4)
     print(igene)
 
 }

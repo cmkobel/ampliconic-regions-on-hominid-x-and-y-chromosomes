@@ -2,7 +2,7 @@ library(readr)
 library(tidyverse)
 
 
-setwd("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots/png2")
+setwd("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots/pdf2")
 #getwd()
 setwd("..")
 df <- read_csv("../full.csv")[,-1]
@@ -52,7 +52,7 @@ for(ichrom in unique(df$chrom)) {
             ggtitle(paste(ichrom, ": ", expand_species(ispecies), sep="")) +
             labs(y=paste("number of copies"), x="gene") +
             theme(axis.text.x = element_text(angle=90, hjust=1)) 
-        ggplot2::ggsave(paste(ichrom, "_species_", ispecies, ".png", sep=""), width=2.8, height=4)
+        ggplot2::ggsave(paste(ichrom, "_species_", ispecies, ".pdf", sep=""), width=2.8, height=4)
         print(ispecies)
         #print(get_non_amp_reg(ichrom))
     }
@@ -68,7 +68,7 @@ for(ichrom in unique(df$chrom)) {
             #scale_y_continuous(limits = c(0,max(df$))) +
             ggtitle(paste(ichrom, ": ", igene, sep="")) +
             labs(y=paste("number of copies"), x="species")
-        ggplot2::ggsave(paste(ichrom, "_gene_", igene, ".png", sep=""), width=2.8, height=4)
+        ggplot2::ggsave(paste(ichrom, "_gene_", igene, ".pdf", sep=""), width=2.8, height=4)
         print(igene)
         #print(get_non_amp_reg(ichrom))
     }
