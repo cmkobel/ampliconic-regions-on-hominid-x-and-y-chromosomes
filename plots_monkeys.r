@@ -35,7 +35,7 @@ df = df %>%
     mutate(norm_count = count / df[df$gene == get_non_amp_reg(chrom) & df$ind == ind,]$count)
 View(df)
 
-setwd("png2")
+#setwd("png2")
 
 # overview
 # del ind plotsene op i chromosom (så det er de samme gener sammen)
