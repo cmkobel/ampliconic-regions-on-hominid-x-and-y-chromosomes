@@ -23,8 +23,24 @@ x_human = x_human %>%
 table(as.factor(x_human$sex), as.factor(x_human$sexchroms))
 
 
+# overview
+for(i in 1:1) {
+    ggplot(x_human[! is.na(x_human$gene) & ! is.na(x_human$sex),], aes(x=gene, y=normalized_cov, color=sex)) +
+        #geom_point(size=3) +
+        geom_jitter(width=0.15, height=0.00) +
+        #facet_wrap(~ ind) + 
+        #scale_y_continuous(limits = c(0,max(df$))) +
+        ggtitle("X: Human") +
+        labs(y=paste("number of copies"), x="gene") +
+        theme(axis.text.x = element_text(angle=90, hjust=1)) 
+    ggplot2::ggsave("human/X_human.pdf", width=2.8, height=4)
+    print("x human overview")
+    #print(get_non_amp_reg(ichrom))
+}
+
+
 # jitter
-for (igene in c("GAGE4", "CT47A4", "CT45A5", "SPANXB1", "OPN1LW", "DMD")) {
+for (igene in unique(na.omit(x_human$gene))) {
     ggplot(na.omit(x_human[x_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
         #geom_point(size=3) +
         geom_jitter(width=0.1, height=0.00) +
@@ -36,17 +52,17 @@ for (igene in c("GAGE4", "CT47A4", "CT45A5", "SPANXB1", "OPN1LW", "DMD")) {
 }
 
 # boxplot
-for (igene in c("GAGE4", "CT47A4", "CT45A5", "SPANXB1", "OPN1LW", "DMD")) {
-    ggplot(na.omit(x_human[x_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
-        #geom_point(size=3) +
-        #geom_jitter(width=0.1, height=0.00) +
-        geom_boxplot() +
-        #scale_y_continuous(limits = c(0,max(df$))) +
-        ggtitle(paste("X: ", igene, sep="")) +
-        labs(y=paste("number of copies"), x="species")
-    ggplot2::ggsave(paste("human/X_human_", igene, "_boxp.pdf", sep=""), width=2, height=4)
-    print(igene)
-}
+# for (igene in unique(na.omit(x_human$gene))) { # c kan erstattes med unique
+#     ggplot(na.omit(x_human[x_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
+#         #geom_point(size=3) +
+#         #geom_jitter(width=0.1, height=0.00) +
+#         geom_boxplot() +
+#         #scale_y_continuous(limits = c(0,max(df$))) +
+#         ggtitle(paste("X: ", igene, sep="")) +
+#         labs(y=paste("number of copies"), x="species")
+#     ggplot2::ggsave(paste("human/X_human_", igene, "_boxp.pdf", sep=""), width=2, height=4)
+#     print(igene)
+# }
 
 
 
@@ -58,10 +74,14 @@ y_human <- read_delim("../y_human_coverage_all_AR_corr.tsv",
 # Translate into gene names
 y_human = y_human %>%
     mutate(species = "human") %>%
-    #mutate(gene = AR) %>%
     mutate(gene = case_when(
-        AR == "chrY.background" ~ "chr. Y b.g.",
-        AR != "chrY.background" ~ AR)) %>%
+        AR == "AMELY" ~ "AMELY",
+        AR == "BPY2" ~ "BPY2",
+        AR == "CDY" ~ "CDY",
+        AR == "PRY" ~ "PRY",
+        AR == "RBMY1A1" ~ "RBMY1A1",
+        AR == "TSPY" ~ "TSPY",
+        AR == "chrY.background" ~ "chr. Y b.g.")) %>%
     dplyr::rename(sexchroms = sex) %>%
     mutate(sex = case_when(
         sexchroms == "XX" ~ "F",
@@ -69,8 +89,26 @@ y_human = y_human %>%
 #validate sex
 table(as.factor(y_human$AR), as.factor(y_human$gene))
 
+
+# overview
+for(i in 1:1) {
+    ggplot(y_human[! is.na(y_human$gene),], aes(x=gene, y=normalized_cov, color=sex)) +
+        #geom_point(size=3) +
+        geom_jitter(width=0.15, height=0.00) +
+        #coord_trans(y="log10") +
+        #facet_wrap(~ ind) + 
+        #scale_y_continuous(limits = c(0,max(df$))) +
+        ggtitle("Y: Human") +
+        labs(y=paste("number of copies"), x="gene") +
+        theme(axis.text.x = element_text(angle=90, hjust=1)) 
+    ggplot2::ggsave("human/Y_human.pdf", width=2.8, height=4)
+    print("y human overview")
+}
+
+
+
 # jitter
-for (igene in c("BPY2", "CDY", "DAZ", "HSFY", "PRY", "TSPY", "XKRY", "chr. Y b.g.")) {
+for (igene in unique(na.omit(y_human$gene))) {
     ggplot(na.omit(y_human[y_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
         #geom_point(size=3) +
         geom_jitter(width=0.1, height=0.00) +
@@ -82,18 +120,18 @@ for (igene in c("BPY2", "CDY", "DAZ", "HSFY", "PRY", "TSPY", "XKRY", "chr. Y b.g
 }
 
 
-# jitter
-for (igene in c("BPY2", "CDY", "DAZ", "HSFY", "PRY", "TSPY", "XKRY", "chr. Y b.g.")) {
-    ggplot(na.omit(y_human[y_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
-        #geom_point(size=3) +
-        #geom_jitter(width=0.1, height=0.00) +
-        geom_boxplot() +
-        #scale_y_continuous(limits = c(0,max(df$))) +
-        ggtitle(paste("Y: ", igene, sep="")) +
-        labs(y=paste("number of copies"), x="species")
-    ggplot2::ggsave(paste("human/Y_human_", igene, "_boxp.pdf", sep=""), width=2, height=4)
-    print(igene)
-}
+# # boxplot
+# for (igene in unique(na.omit(y_human$gene))) {
+#     ggplot(na.omit(y_human[y_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
+#         #geom_point(size=3) +
+#         #geom_jitter(width=0.1, height=0.00) +
+#         geom_boxplot() +
+#         #scale_y_continuous(limits = c(0,max(df$))) +
+#         ggtitle(paste("Y: ", igene, sep="")) +
+#         labs(y=paste("number of copies"), x="species")
+#     ggplot2::ggsave(paste("human/Y_human_", igene, "_boxp.pdf", sep=""), width=2, height=4)
+#     print(igene)
+# }
 
 
 

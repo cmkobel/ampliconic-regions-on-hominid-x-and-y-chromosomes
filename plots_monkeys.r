@@ -4,16 +4,16 @@ library(tidyverse)
 
 setwd("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots/pdf2")
 #getwd()
-setwd("..")
+#setwd("..")
 df <- read_csv("../full.csv")[,-1]
-setwd("png2")
+#setwd("pdf2")
 #View(df)
 
 
 
 
 
-get_non_amp_reg = function(chromosome) {
+chrom2control = function(chromosome) {
     if(chromosome == "X") {
         return("DMD")}
     else if(chromosome == "Y") {
@@ -30,15 +30,12 @@ expand_species = function(species) {
         return(NA)}
 
 
+# er det her en test?
 df = df %>%
-    group_by(ind, chrom) %>%
-    mutate(norm_count = count / df[df$gene == get_non_amp_reg(chrom) & df$ind == ind,]$count)
-View(df)
-
-#setwd("png2")
-
-# overview
-# del ind plotsene op i chromosom (så det er de samme gener sammen)
+    group_by(chrom, ind, add = T) %>%
+    mutate(norm_count = df[df$gene == chrom2control(chrom) & df$ind == ind,]$count)
+View(norm_df)
+ 
 
 
 # chrom species # jeg kan åbenbart ikke få lov til at wrappe.
