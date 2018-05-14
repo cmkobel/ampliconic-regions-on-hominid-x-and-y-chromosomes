@@ -28,6 +28,7 @@ for(i in 1:1) {
     ggplot(x_human[! is.na(x_human$gene) & ! is.na(x_human$sex),], aes(x=gene, y=normalized_cov, color=sex)) +
         #geom_point(size=3) +
         geom_jitter(width=0.15, height=0.00) +
+        geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F) +
         #facet_wrap(~ ind) + 
         #scale_y_continuous(limits = c(0,max(df$))) +
         ggtitle("X: Human") +
@@ -44,6 +45,7 @@ for (igene in unique(na.omit(x_human$gene))) {
     ggplot(na.omit(x_human[x_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
         #geom_point(size=3) +
         geom_jitter(width=0.1, height=0.00) +
+        geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F) +
         #scale_y_continuous(limits = c(0,max(df$))) +
         ggtitle(paste("X: ", igene, sep="")) +
         labs(y=paste("number of copies"), x="species")
@@ -95,6 +97,7 @@ for(i in 1:1) {
     ggplot(y_human[! is.na(y_human$gene),], aes(x=gene, y=normalized_cov, color=sex)) +
         #geom_point(size=3) +
         geom_jitter(width=0.15, height=0.00) +
+        geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F) +
         #coord_trans(y="log10") +
         #facet_wrap(~ ind) + 
         #scale_y_continuous(limits = c(0,max(df$))) +
@@ -112,6 +115,7 @@ for (igene in unique(na.omit(y_human$gene))) {
     ggplot(na.omit(y_human[y_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
         #geom_point(size=3) +
         geom_jitter(width=0.1, height=0.00) +
+        geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F) +
         #scale_y_continuous(limits = c(0,max(df$))) +
         ggtitle(paste("Y: ", igene, sep="")) +
         labs(y=paste("number of copies"), x="species")
