@@ -1,6 +1,11 @@
 ### Bachelorproject:
 # Copy Number Variation of Ampliconic Regions on Hominid X and Y chromosomes
 
+Please read the latest `.pdf`file in the `latex` directory, for a complete explanation of everything in this repository.
+
+***
+## Short (outdated) description of files
+
 The files `workflow.py` `workflow_templates.py` depends on [gwf-org](http://gwf.readthedocs.io/en/latest/index.html) to run. The files depict the pipeline where genomes are mapped to several artificial chromosomes. The copy number variation is output, merged with `merge.py` and the data is subsequently visualized with `plots.R`
 
 The plots are output to `plots/plots`.
