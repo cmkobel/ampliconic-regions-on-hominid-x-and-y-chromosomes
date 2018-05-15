@@ -1,7 +1,7 @@
 ### Bachelorproject:
 # Copy Number Variation of Ampliconic Regions on Hominid X and Y chromosomes
 
-Please read the latest `.pdf`file in the `latex` directory, for a complete explanation of everything in this repository.
+Please read the latest `.pdf` file in the `latex` directory, for a complete walk through.
 
 ***
 ## Short (outdated) description of files
