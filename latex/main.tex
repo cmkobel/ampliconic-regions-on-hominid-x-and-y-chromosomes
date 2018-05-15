@@ -1,32 +1,7 @@
-% ----------------------------------------------------------------
-% achemso --- Support for submissions to American Chemical
-%  Society journals
-% Maintained by Joseph Wright
-% E-mail: joseph.wright@morningstar2.co.uk
-% Originally developed by Mats Dahlgren
-%  (c) 1996-98 by Mats Dahlgren
-%  (c) 2007-2008 Joseph Wright
-% Released under the LaTeX Project Public license v1.3c or later
-% See http://www.latex-project.org/lppl.txt
-% 
-% Part of this bundle is derived from cite.sty, to which the
-% following license applies:
-%   Copyright (C) 1989-2003 by Donald Arseneau
-%   These macros may be freely transmitted, reproduced, or
-%   modified provided that this notice is left intact.
-% ----------------------------------------------------------------
-% 
-% The achemso bundle provides a LaTeX class file and BibTeX style
-% file in accordance with the requirements of the American
-% Chemical Society.  The files can be used for any documents, but
-% have been carefully designed and tested to be suitable for
-% submission to ACS journals.
-% 
-% The bundle also includes the natmove package.  This package is
-% loaded by achemso, and provides automatic moving of superscript
-% citations after punctuation.
+% jeg vil starte med at lave en meget rodet kladde som indeholder en masse ideer. Og så rydde langsomt op i den.
 
 
+% 15 * 2400 = 36000 anslag
 
 
 \documentclass[
@@ -38,6 +13,8 @@ manuscript=article]{achemso}
 
 
 \usepackage[utf8]{inputenc}
+\usepackage{blindtext}
+%\usepackage{showframe}
 %\usepackage{lmodern}
 
 %\renewcommand*\familydefault{\sfdefault} 
@@ -49,9 +26,9 @@ manuscript=article]{achemso}
 %\usepackage[T1]{fontenc}
 
 
-\renewcommand{\familydefault}{\sfdefault}
 \usepackage[scaled=1]{tgheros}
 \usepackage[helvet]{sfmath}
+\renewcommand{\familydefault}{\sfdefault}
 \everymath={\sf}
 \usepackage[T1]{fontenc}
 
@@ -66,31 +43,40 @@ manuscript=article]{achemso}
 
 \author{Carl Mathias Kobel}
 
-\affiliation[Unknown University]
-{BiRC, AU}
+\affiliation{BiRC, AU}
 
 \email{kobel@pm.me}
 
 \title[\texttt{achemso} demonstration]
-{Bachelor Project: Copy Number Variation of Ampliconic Regions on Hominid X and Y chromosomes}
+{Bachelor internship: Copy Number Variation of Ampliconic Regions on Hominid X and Y chromosomes}
 
 \begin{document}
 
 \begin{abstract}
-By mapping the genomes of a few Chimpanzee and Gorilla individuals, we measured the copy number variation of a few genes that were assumed to be ampliconic based on human trials.
+As we are interested in describing the ampliconic genes on the hominid X chromosome, we assembled species specific artificial chromosomes containing orthologs of genes which are known to be ampliconic in human. By mapping reads from several chimpanzee and gorilla individuals upon these species specific artificial chromosomes, we measured the copy number variation and showed that several of these genes might not be ampliconic in these human-related species.
 \end{abstract}
 
-\clearpage
+%\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Introduction
 \section{Introduction}
-No idea how they evolved > how they diverged between human, chimp and gorilla
-Were they ampliconic 
-Did the ampliconic genes become amplified in the human lineage or in the great apes?
-What drives ampliconic gene evolution
 
 
-\subsection{Outline}
+\subsection{Sex determining systems} % Mostly content from Elise's master
+% I want to start by introducing the sex determ. systems.
+The sex determining system present (in mammals) today most probably arose because a variant on one of the homologous chromosomes disrupted the former sex determining system, which is supposed to have been environmental (i.e. temperature regulated as in some ). This is, according to Ohno's model (Ohno 1967) the explanation for the development of the ZW (heterogametic female) sex determining system. It has since been shown (with comparative mapping) that the development of the XY (heterogametic male) sex determining system most probably has a similar origin.
+This variant may have been the start of the divergence between the sex chromosomes. The SRY gene (on the Y chromosome) is considered the Testis Determining Factor which means that the presence of this gene defines the sex of an individual (in mammals).
 
+Although the sex chromosomes have diverged to become very different, they still have areas with recombination in the very ends called PAR1 and PAR2. These actively recombining areas are needed for successful cell division and are thus conserved from before the divergence.
+
+%
+Correlation between sexual behaviour and sperm quality. ??reference
+
+\subsection{Ampliconic genes} % Mostly content from Elise's paper 17
+Ampliconic genes are present only on sex chromosomes. They consist of very similar adjacent duplications with copy numbers anywhere between 2 and 40. The mechanism by which they duplicate is not known. Many ampliconic genes are testis expressed and assumed (??why) to be involved in in meiotic drive processes. Meiotic drive favours the segregation of specific genes, thus disturbing the mendelian segregation ratios. As the genetic homology between human and mouse is much higher for single copy genes, than for ampliconic genes, it is suggested that the evolutionary turnover is much faster for ampliconic genes. Ampliconic genes are suspected?? to be drivers of speciation, since a fast duplication mechanism may render the recombination of X chromosomes impossible ??speculation.
+
+
+% overgang
+As the copy number of ampliconic genes have already been described in human, we now want to investigate how many of these genes also show ampliconic behaviour in chimpanzee and gorilla.
 
 
 %Citation of Einstein paper~\cite{doi:10.1093/molbev/msi198}.
@@ -99,8 +85,7 @@ What drives ampliconic gene evolution
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Method
 \section{Method}
 
-\subsection{Overview}
-The pipeline (Figure \ref{fig:pipeline}) of this project consists of several parts, all originating from \textit{Lucotte et al.\cite{LucotteDyn}}. Firstly, an artificial chromosome with ampliconic candidates was assembled for each species, for each of their sex chromosomes. Later, reads of the genomes were mapped upon the artificial chromosome, and the copy number was estimated with a non-ampliconic control.
+The pipeline\cite{cmkpipe} (Figure \ref{fig:pipeline}) of this project consists of several parts, all originating from \textit{Lucotte et al.\cite{LucotteDyn}}. Firstly, an artificial chromosome with ampliconic candidates was assembled for each species, for each of their sex chromosomes. Later, genome reads were mapped upon the artificial chromosome, and the copy number was estimated in relation to a non-ampliconic control.
 %\def\code#1{\texttt{#1}}
 
 
@@ -113,7 +98,7 @@ The pipeline (Figure \ref{fig:pipeline}) of this project consists of several par
 
 
 \subsection{Assembly of artificial chromosome}
-For assembly of the artificial chromosomes (artificial chromosomes) we selected the human genes showing ampliconic behaviour from \textit{Lucotte et al.\cite{LucotteDyn}}. These genes are selected visually from dotplots. We searched for orthologs in chimpanzee (reference: Pan\_tro\_3.0) and gorilla (reference: gorGor4) for the associated human genes in the Ensembl genome browser. Only orthologs with a subject/query identical factor of more than 0.5 were included (see Table \ref{tab:orthologs}). When orthologs were not found in Ensembl, we blasted the human genes against the chimpanzee and gorilla references \texttt{blastn -subject <reference>.fa -query <human\_gene>.fa -out output.txt} and again only selected regions with a subject/query identical factor of more than 0.5. The orthologs found on ensembl were downloaded directly as fasta files. The orthologs found with blast were cut out of the reference with \texttt{samtools faidx <reference>.fa <chromosome>:<start>-<end>}. The files were later merged into complete artificial chromosomes with \texttt{cat *.fa > <artificial\_ chromosome>.fa}. These artificial chromosomes (chimpanzee X, chimpanzee Y and gorilla X) were then put into the read-mapping pipeline presented in the next part. Several problems occured in the assembly of the artificial chromosomes. We checked coherence between Ensembl and BLAST results with GAGE4 in gorilla. The Query \%id and BLAST Identities are on par, but the length fraction is far off. This may be due to the way the human ampliconic regions were chosen. The human ampliconic regions from \textit{Lucotte et al.\cite{LucotteDyn}} has a length of 7330bp whereas the corresponding gene on Ensembl has a length of 15285bp. The remedy could be to blast the human genes from Ensembl against the chimpanzee and gorilla references.
+In order to assemble the artificial chromosomes we took inspiration from \textit{Lucotte et al.\cite{LucotteDyn}} and selected all the genes that exhibited an ampliconic nature. In this paper, the genes selected because they exhibited an ampliconic nature in dotplots. (?? Why is it that only such few genes are indeed ampliconic, if they look like they all should be on the dotplot??) We searched for orthologs in chimpanzee (reference: Pan\_tro\_3.0) and gorilla (reference: gorGor4) for the associated human genes (reference: GRCh38.p12) in the Ensembl genome browser. Only orthologs with a subject/query identical factor of more than 0.5 and a length of at least of the original (??) were included (see Table \ref{tab:orthologs}). When orthologs were not found in the Ensembl genome browser, we blasted the human genes against the chimpanzee and gorilla references \texttt{blastn -subject <reference>.fa -query <human\_gene>.fa -out output.txt} and again only selected regions with a subject/query identical factor of more than 0.5 and ortholog length divided by original length of at least 0.5 as well. The orthologs found on ensembl were downloaded directly as fasta files. The orthologs found with BLAST were cut out of the reference with SAMtools. The isolated genes were later merged into a complete artificial chromosomes with GNU cat. These artificial chromosomes (chimpanzee X, chimpanzee Y and gorilla X) were then put into the read-mapping pipeline presented in the next part. Several problems occured in the assembly of the artificial chromosomes. We checked coherence between Ensembl and BLAST results with GAGE4 in gorilla. The Query \%id and BLAST Identities are on par, but the length fraction is far off. This may be due to the way the human ampliconic regions were chosen. The human ampliconic regions from \textit{Lucotte et al.\cite{LucotteDyn}} has a length of 7330bp whereas the corresponding gene on Ensembl has a length of 15285bp. A supposed remedy is to blast the human genes from Ensembl against the chimpanzee and gorilla references. (?? this is surely because i have misunderstood something about the assembly of human ACs)
 
 
 
@@ -144,7 +129,7 @@ For assembly of the artificial chromosomes (artificial chromosomes) we selected 
                     Chimpanzee & Y & XKRY & - & - & 0.98 & 1.00 \\ 
                     Chimpanzee & Y & AMELY (control) & 0.98 & 1.00 & - & - \\ 
         \end{tabular}
-        \caption{Table of orthologs chosen for assembly of the artificial chromosomes for the respective species. Query id\% is the percentage of the human sequence matching the sequence of the orthologue. Length fraction denotes the length of the orthologue relative to the original (human) sequence. Identities denotes the fraction of similar nucleotides in the pairwise alignment. Orthologue candidate genes with a Query id\% < 0.5 or length fraction < 0.5 were discarded. See the full table including discarded samples at google drive\cite{gdriveorthoac}}
+        \caption{Table of orthologs: These orthologs were chosen in order to do a comparative study. The genes were assembled into artificial chromosomes for the respective species. Query id\% is the percentage of the human sequence matching the sequence of the ortholog. Length fraction denotes the length of the ortholog relative to the original (human) sequence. Identities denotes the fraction of similar nucleotides in the pairwise alignment. Ortholog candidate genes with a Query id\% < 0.5 or length fraction < 0.5 were discarded. See the full table including discarded samples at google drive\cite{gdriveorthoac}}
         \label{tab:orthologs}
     \end{center}
 \end{table}
@@ -152,20 +137,58 @@ For assembly of the artificial chromosomes (artificial chromosomes) we selected 
 \normalsize
 
 
-\subsection{Mapping of artificial chromosomes upon genomes}
+\subsection{Mapping of reads upon artificial chromosomes}
 
 
-The following part of the pipeline was written into a workflow with gwf-org\cite{gwforg} in order to support parametric inputs, easing reproducibility. The original code from \textit{Lucotte et al.\cite{LucotteDyn}} was rewritten from gwf v0.7 to v1.2.1 and python v2.7 to 3.6 in order to use newer functionality in the packages. In this process, much of the code was also reorganized in such a way that all input parameters were concentrated in one spot, such that the pipeline can easily be used for different batches of individuals, which may be needed in order to produce results with a higher statistical power. The takes in a number of individuals (grouped in species) and their genomes, and an artificial chromosome as reference. This is done by passing a dictionary with various elements to the workflow. When all the input parameters are parsed from various text files (??explain), it indexes the genomes and starts mapping each phase of the genome upon the artificial chromosome. Since the individuals might have been sequenced several times independently (??maybe from various tissues - who knows??), and these sequences are all included, we merge the sequence alignments (BAM-files) into one per individual. For quality control, we filter with Sambamba\cite{doi:10.1093/bioinformatics/btv098}: \texttt{(mapping\_quality >= 50) and (cigar =~ /100M/) and ([NM] < 3)}. We then calculate the read depth with SAMtools\cite{Li:2009:SAF:1613280.1613286}. Because the distribution is not necessarily symmetric, we take the median of the read depth across all positions in the gene. This median number is what we subsequently regard as the copy number. In order to normalize the copy number of each gene, we divide by the copy number of the controls. In case of the X chromosome, we selected DMD as a control gene, since it is known to be non-ampliconic (in humans). For the Y chromosome AMELY is selected for the same reason. Surely, it would have made a lot of sense to include many more control genes, as there is no reason to believe that DMD and AMELY might not be non-ampliconic, other than the fact that their distributions look very limited (See the discussion section??).
+The following part of the pipeline was written into a workflow with gwf-org\cite{gwforg} in order to support parametric inputs, easing reproducibility. The original code from \textit{Lucotte et al.\cite{LucotteDyn}} was rewritten from gwf v0.7 to v1.2.1 and python v2.7 to 3.6 in order to use newer functionality in the packages. In this process, much of the code was also reorganized in such a way that all input parameters were concentrated in one spot, such that the pipeline can easily be used for different batches of individuals, which might be useful in order to produce results with a higher statistical power in future projects. The pipeline takes in a number of individuals (grouped in species) and their genomes, and an artificial chromosome as reference. This is done by passing a python dictionary (data structure) with various elements to the workflow. When all the input parameters are parsed from various text files (??explain), it indexes the genomes and starts mapping each phase of the genome upon the artificial chromosome. Since the individuals might have been sequenced several times independently (??maybe from various tissues - who knows??), and these sequences are all included, we merge the sequence alignments (BAM-files) into one per individual. For quality control, we filter with Sambamba\cite{doi:10.1093/bioinformatics/btv098}: \texttt{(mapping\_quality >= 50) and (cigar =~ /100M/) and ([NM] < 3)}. We then calculate the read depth with SAMtools\cite{Li:2009:SAF:1613280.1613286}. Because the distribution is not necessarily symmetric, we use the median to measure the read depth across all positions in the gene. This median number is what we subsequently regard as the un-normalized copy number. In order to normalize the copy number of each gene, we divide by the copy number of the controls. In case of the X chromosome, we selected DMD as the control gene, since it is known to be non-ampliconic in humans. For the Y chromosome AMELY is selected for the same reason. Surely, it would have made a lot of sense to include many more control genes, as there is no reason to believe that DMD and AMELY should necessarily be non-ampliconic in chipanzee and gorilla just because they are in human. Fortunately, the control genes show a low and limited distribution (See the discussion section??).
+
+In order to compare and validate the method, we also executed the pipeline with the human artificial chromosomes. The hypothesis should be that the copy number would be higher when using the species specific (chimpanzee and gorilla) artificial chromosomes, because the similarity is higher, thus catching many more gene copies. Also, the genes not being orthologous between human-chimpanzee or human gorilla, should not show any ampliconic behaviour because no similar sequences should be available in the species. (See the discussion section??)
 
 \subsection{Visualization}
-
+??Plotting with ggplot or whatever..
 
 \clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Results
 \section{Results}
 
-\subsection{Visual overview}
+\subsection{X chromosome}
 
+
+\def \restrip {.55}
+
+\begin{center}
+    \begin{figure}
+        \includegraphics[height=\restrip\linewidth]{illustrations/X_species_chimp.pdf}\quad\includegraphics[height=\restrip\linewidth]{illustrations/X_species_gorilla.pdf}\quad\includegraphics[height=\restrip\linewidth]{illustrations/X_human.pdf}
+        \caption{X chromosome thingy}
+        \label{fig:X_chrom_all}
+    \end{figure}
+\end{center}
+
+
+\subsection{Y chromosome}
+\begin{center}
+    \begin{figure}
+        \includegraphics[height=\restrip\linewidth]{illustrations/Y_species_chimp.pdf}\quad\includegraphics[height=\restrip\linewidth]{illustrations/Y_human.pdf}
+        % consider removing sex == NA
+        \caption{Y chromosome thingy}
+        \label{fig:Y_chrom_all}
+    \end{figure}
+\end{center}
+
+
+
+
+
+\begin{scheme}
+  \includegraphics[height=10cm]{figure_X_gene_GAGE4.png}
+  \caption{An example graphics}
+  \label{sch:example}
+\end{scheme}
+%Optima for headings.
+%Arial for everything else.
+
+\subsection{Visual overview}
+Placeholder
 New float types are automatically set up by the class file. The
 means graphics are included as follows (scheme \ref{sch:example}).  As
 illustrated, the float is ``here'' if possible.
@@ -180,9 +203,18 @@ illustrated, the float is ``here'' if possible.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Discussion
 \section{Discussion}
 
-What can we really conclude?
-Take basis in examples from the results.
-Try and make it sound like there is 
+\subsection{Method criticism}
+We only looked at genes that where ampliconic in human, and not the other way around. I mean, there should be genes with ampliconic behaviour in chimpanzee and gorilla, without ampliconicness in human.
+I shouldn't have named the blasted gene results the name of the original, as I'm not just like creating my own annotation or whatever.
+
+\subsection{Results criticisms) 
+We didn't look at how ampliconic-ness relates to expression levels.
+When are the genes expressed (in meiosis)?
+For some reason, the gorilla Y chromosome was just too divergent. (No orthologs ?!)
+It could be interesting to compare the paralogs between X and Y, to see which became ampliconic. (Maybe not so interesting because very few genes are present on the Y anyway)
+Do the copies stay similar because there is a mechanism keeping them alike, or is it simply because the duplication event is too recent for any divergence to have happened?
+How much different are the results when using the somewhat different human artificial chromosomes? This part should probably be in the beginning as it its outcome will change the results fro the species specific artificial chromosomes significantly.
+
 
 
 
