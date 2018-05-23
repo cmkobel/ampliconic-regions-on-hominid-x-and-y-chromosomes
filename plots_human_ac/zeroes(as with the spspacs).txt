@@ -1,0 +1,30 @@
+The following genes should be present at least as zeroes in the grouped species/chromosome
+----------------------------------
+
+
+chimpanzee X | CarlT CarolinaT Frits Simliki
+>DMD    
+>GAGE4      6_0
+>CT47A4     24_0
+>CT45A5     26_0
+>SPANXB1    27_0
+>OPN1LW     32_0
+
+
+
+Chimpanzee Y | Carl Carolina Frits Simliki
+>AMELY  
+>BPY2   
+>CDY    
+>PRY    
+>RBMY1A1    
+>TSPY   
+    TJEK (dog indsat med mellemrum i stedet for tabs i de respektive <chrom>_<ind>_cn_median.csv)
+
+
+gorilla X | Banjo Mawenzi Mutasi Mimi
+>DMD
+>GAGE4  6_0
+>CT47A4 24_0
+>CT45A5 26_0
+>OPN1LW 32_0

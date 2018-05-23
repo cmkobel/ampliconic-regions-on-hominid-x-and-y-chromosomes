@@ -1,6 +1,8 @@
 List of genes in acs
 ----------------------------------
 
+
+
 ac_chimp_x.fa | Carl Carolina Frits Simliki
 >OPN1LW
 >DMD
@@ -32,3 +34,11 @@ ac_gorilla_x.fa | Banjo Mawenzi Mutasi Mimi
 
 orangutan: not included
 Masala Moni Suma Buschi
+
+Monolog:
+kommentar slut maj: men har jeg ikke glemt at gøre dette for Y kromosomet (i hvert fald for Banjo) ?
+C: Nej, jeg har ikke glemt at gøre det for nogen her. Jeg skal bare huske at fjerne Y gorilla målingerne når jeg plotter. Desuden skal jeg huske at skrive nuller ind i plots_human_ac/*median.csv filerne, så de nuller kommer med.
+
+Husk også at fjerne orangutaner fra human_ac
+nu mangler jeg bare nullerne til human_ac
+Jeg skal også huske at fjerne de gener som ikke optræder i ac chromosomerne

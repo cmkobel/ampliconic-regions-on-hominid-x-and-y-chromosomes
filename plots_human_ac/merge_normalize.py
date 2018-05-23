@@ -6,8 +6,10 @@ import pandas as pd
 # This file is to be run locally.
 # As there are no heavy computations, and mostly plots.
 
-# download all <chrom>_<ind>_cn_median.csv files and put them in two folders: x and y
+# Why is it called 'normalize' ? it doesn't normalize anything..
 
+# download all <chrom>_<ind>_cn_median.csv files and put them in two folders: x and y
+# maybe I should use the one in the plots (monkeys) folder instead? This file is residing in the coverage root dir.
 
 
 
@@ -58,4 +60,4 @@ frame = frame[['ind', 'species', 'sex', 'chrom', 'gene', 'pos', 'count']]
 
 print(frame.reset_index())
 
-frame.reset_index(drop = True).to_csv('full.csv')
+frame.reset_index(drop = True).to_csv('full_added_zeroes.csv')

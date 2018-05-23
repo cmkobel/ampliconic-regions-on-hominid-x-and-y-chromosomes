@@ -1,3 +1,4 @@
+# This file creates the plots from elises results on humans.
 library(readr)
 library(tidyverse)
 setwd("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots/pdf2")

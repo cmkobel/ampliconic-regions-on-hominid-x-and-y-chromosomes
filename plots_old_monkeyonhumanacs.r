@@ -1,7 +1,9 @@
+# this file created plots based on the human acs
+
 library(readr)
 library(tidyverse)
 #setwd("plots")
-df <- read_csv("full.csv")[,-1]
+df <- read_csv("plots_human_ac/full.csv")[,-1]
 View(df)
 
 
