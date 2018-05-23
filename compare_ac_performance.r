@@ -4,7 +4,7 @@
 library(readr)
 library(tidyverse)
 spsp_ac <- read_csv("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots/full.csv")
-human_ac <- read_csv("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots_human_ac/full.csv")
+human_ac <- read_csv("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots_human_ac/full_zeroes_inserted23b.csv")
 
 # Done before normalization.
 count_spsp = spsp_ac %>% 

@@ -17,7 +17,7 @@ cp batch_y6.2_chimp/cn_medians/*csv plots
 '''
 
 
-
+# 23. may: the file is set up to work on the data i made through the pipeline with the human acs.
 
 
 
@@ -39,7 +39,7 @@ def build_meta_dict():
 
 meta_data = build_meta_dict()
 
-wd = 'plots/'
+wd = 'plots_human_ac/'
 
 frame = pd.DataFrame()
 for file in [f for f in listdir(wd) if isfile(join(wd, f))]: # for each file in the dir
@@ -74,4 +74,4 @@ print(frame.reset_index())
 
 
 
-frame.reset_index(drop = True).to_csv('plots/full.csv')
+frame.reset_index(drop = True).to_csv(wd + '/full_zeroes_inserted23a.csv')
