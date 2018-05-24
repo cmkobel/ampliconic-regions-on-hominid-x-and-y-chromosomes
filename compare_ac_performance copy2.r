@@ -1,96 +1,23 @@
 # this file is used in order to compare the read depths using either the human ac on monkeys, or the species specific ones.
-# maybe the file should be called compare_acs.r instead
+# This is the second iteration, because the first one became too cluttered
 
 library(readr)
 library(tidyverse)
+library(ggplot2)
 spsp_ac <- read_csv("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots/full.csv")
 human_ac <- read_csv("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots_human_ac/full_zeroes_inserted23b.csv")
 
-# Done before normalization.
-count_spsp = spsp_ac %>% 
-    #select(ind, gene, count)
-    group_by(chrom, gene, species) %>% 
-    summarise(mean_cov = mean(count),
-              `artificial chromosome` = "species specific")
 
-count_human = human_ac %>% 
-    # group_by(ind, gene, add = T) %>%
-    # summarise(mean_cov = mean(count)) %>% 
-    mutate(gene = case_when(
-        # X chrom.
-        gene == "6_0" ~ "GAGE4",
-        gene == "24_0" ~ "CT47A4",
-        gene == "26_0" ~ "CT45A5",
-        gene == "27_0" ~ "SPANXB1",
-        gene == "32_0" ~ "OPN1LW",
-        gene == "DMD" ~ "DMD",
-        # Y chrom
-        gene == "AMELY" ~ "AMELY",
-        gene == "BPY2" ~ "BPY2",
-        gene == "CDY" ~ "CDY",
-        gene == "PRY" ~ "PRY",
-        gene == "RBMY1A1" ~ "RBMY1A1",
-        gene == "TSPY" ~ "TSPY"
-        #gene == "chrY.background" ~ "chr. Y b.g."
-        )) %>% na.omit() %>% 
-    group_by(chrom, gene, species) %>% 
-    summarise(mean_cov = mean(count),
-              `artificial chromosome` = "human")
-
-
-# otogether = count_spsp %>% 
-#     full_join(count_human, by = "gene") %>% na.omit %>% 
-#     mutate(rel_diff = mean_cov_spsp_ac / mean_cov_human_ac) %>% 
-#     mutate(abs_diff = mean_cov_spsp_ac - mean_cov_human_ac) %>% 
-#     arrange(rel_diff)
-
-together = rbind(count_spsp, count_human) %>% 
-    group_by(gene) %>% 
-    mutate(mean_diff = mean(mean_cov)) %>% # Bruges ingen steder?
-    arrange(mean_diff) # Egentlig ikke nødvendigt at sortere.
-
-# together[together$chrom == "X" & together$`artificial chromosome` == "species specific",] %>% 
-#     View()
-
-# 1 points, this plot is too weird looking
-# ggplot(together) +
-#     geom_line(aes(x = gene, y = mean_cov), color = "grey") +
-#     geom_point(aes(x = gene, y = mean_cov, color = `artificial chromosome`))
-
-# 2 bars
-ggplot(together[together$species = "chimp",]) +
-    #geom_line(aes(x = gene, y = mean_cov), color = "grey") +
-    geom_col(aes(x = gene, y = mean_cov, fill = `artificial chromosome`),
-             position = "dodge", width = 0.5) +
-    labs(title = "All individuals, X and Y chromosomes:" , y = "coverage: mean across all individuals", subtitle="comparison of two artificial chomosomes") +
-    scale_x_discrete(limits = c("GAGE4", "SPANXB1", "CT47A4", "CT45A5", "OPN1LW", "AMELY", "BPY2", "PRY", "CDY", "RBMY1A1", "TSPY" )) +
-    theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + 
-    ggsave(file = "plots/compare/all.pdf", width = 10, height = 6) 
-
-# print(
-#     grid.arrange(
-#         ggplot(plot_df) + 
-#             geom_point(aes(x=POSITION, y=iHS), size=0.03) +
-#             xlab("") +
-#             ylab("iHS") + ggtitle(title),
-#         ggplot(plot_df) + 
-#             geom_point(aes(x=POSITION, y=`-log10(p-value)`), size=0.03) +
-#             xlab("chromosome X position") +
-#             ylab("-log10( p-value )"),
-#         layout_matrix = rbind(c(1),c(2))
-#     )
-# )
-
+abbrev2spec = function(abbrev) {
+    if (abbrev == "gorilla") return ("Gorilla")
+    else if (abbrev == "chimp") return ("Chimpanzee")
+}
+    
+filtered_spsp = spsp_ac %>%
+    mutate(`artificial chromosome` = "species-specific")
 
     
-  # maybe I should do it with a boxplot (or jitter) for all individuals.
-# facet_wrap it between species
-    
-box_spsp = spsp_ac %>%
-    mutate(`artificial chromosome` = "species specific")
-
-    
-box_human = human_ac %>% 
+filtered_human = human_ac %>% 
     # group_by(ind, gene, add = T) %>%
     # summarise(mean_cov = mean(count)) %>% 
     mutate(gene = case_when( # omskriv gene kolonnen
@@ -114,13 +41,46 @@ box_human = human_ac %>%
     # Fjern orangutanger!
     mutate(`artificial chromosome` = "human")
 
-# I should really consider removing the Y genes from the gorilla in the human ac file. They shouldn't be compared to spsp_ac, as they don't exist over there.
-box_human = box_human[! (box_human$species == "gorilla" & box_human$chrom == "Y") # fjern gorilla Y
-                      & box_human$species != "orang" # fjern orangutaner
-                      & !(box_human$species == "gorilla" & box_human$gene == "SPANXB1" ),] # fjern spanxb1 fra gorilla
+# Det her kan sikkert også gøres med select i linjerne over.
+filtered_human = filtered_human[! (filtered_human$species == "gorilla" & filtered_human$chrom == "Y") # fjern gorilla Y
+                      & filtered_human$species != "orang" # fjern orangutaner
+                      & !(filtered_human$species == "gorilla" & filtered_human$gene == "SPANXB1" ),] # fjern spanxb1 fra gorilla
 
 
-box_together = rbind(box_human, box_spsp)
+together = rbind(filtered_human, filtered_spsp) %>% 
+    group_by(species, sex, chrom, gene, `artificial chromosome`) %>% 
+    summarise(mean_cov = mean(count))
+
+# together[together$species == ispecies & together$`artificial chromosome` == "species-specific" & together$chrom == "Y",] %>% 
+#     View()
+
+ispecies = "chimp"
+ggplot(together[together$species == ispecies,], aes(x = gene, y = mean_cov, fill = `artificial chromosome`)) +
+    geom_col(position = "dodge", width = 0.5) +
+    geom_text(aes(y = mean_cov + 2.5, label = round(mean_cov)), position = position_dodge(width = 0.5)) +
+    facet_grid(sex ~ .) +
+    scale_x_discrete(limits = c("GAGE4", "CT47A4", "OPN1LW", "SPANXB1", "CT45A5", "BPY2", "PRY", "CDY", "RBMY1A1", "TSPY" ))
+    labs(title = paste0(abbrev2spec(ispecies), " chromosomes X and Y, all individuals"), y = "coverage: mean across all individuals") +
+    theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+
+
+
+            #scale_x_discrete(limits = c("BPY2", "PRY", "DMD", "GAGE4", "CDY", "SPANXB1", "CT47A4", "CT45A5", "OPN1LW", "RBMY1A1", "TSPY")) +
+            facet_wrap(~ sex) +
+            labs(title = paste0(abbrev2spec(ispecies), ", ", ichrom, " chromosome"), subtitle="Comparison of different artifical chromosomes", y = "coverage: mean across all individuals") + #,
+            # x="Weather    stations", 
+            # y="Accumulated Rainfall [mm]",
+            # title="Rainfall",
+            #xlab("gene") +
+            #ylab("coverage: mean across all individuals") + 
+            #ggtitle(paste0(abbrev2spec(ispecies), ", ", ichrom, " chromosome: comparison of different artifical chromosomes")) +
+            theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1)) +
+            ggsave(paste0("plots/compare/", ispecies, "_", ichrom, ".pdf"), width = 5, height = 4)
+        # find den samme bredde som de andre figurer har, og brug den til at exportere med. Indstil dodgewidth so det ser sejt ud.
+    }
+}
+
 
 # 
 # ggplot(box_together[box_together$species == "chimp",]) + 
@@ -155,7 +115,7 @@ box_together = rbind(box_human, box_spsp)
 # Jeg vil gerne dele det op i arter med facetter af sex, men med gennemsnit i stedet for 
 
 # lav df til at plotte means kun:
-box_together_mean = box_together %>% 
+together = box_together %>% 
     group_by(species, sex, chrom, gene, `artificial chromosome`) %>%
     summarise(mean_count = mean(count))
 
@@ -185,7 +145,7 @@ ichrom = "Y"
 
 for (ispecies in c("chimp", "gorilla")) {
     for (ichrom in c("X", "Y")) {
-        ggplot(box_together_mean[box_together_mean$species == ispecies & box_together_mean$chrom == ichrom & !(box_together_mean$species == "gorilla" & box_together_mean$gene == "SPANXB1"),], aes(x = gene, y = mean_count)) + 
+        ggplot(together[together$species == ispecies & together$chrom == ichrom & !(together$species == "gorilla" & together$gene == "SPANXB1"),], aes(x = gene, y = mean_count)) + 
             geom_bar(aes(fill = `artificial chromosome`, width = .5), stat = "identity", position = "dodge") +
             #scale_x_discrete(limits = c("BPY2", "PRY", "DMD", "GAGE4", "CDY", "SPANXB1", "CT47A4", "CT45A5", "OPN1LW", "RBMY1A1", "TSPY")) +
             facet_wrap(~ sex) +
