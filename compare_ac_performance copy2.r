@@ -57,10 +57,12 @@ together = rbind(filtered_human, filtered_spsp) %>%
 ispecies = "chimp"
 ggplot(together[together$species == ispecies,], aes(x = gene, y = mean_cov, fill = `artificial chromosome`)) +
     geom_col(position = "dodge", width = 0.5) +
-    geom_text(aes(y = mean_cov + 2.5, label = round(mean_cov)), position = position_dodge(width = 0.5)) +
+    geom_text(aes(y = mean_cov + 3, label = round(mean_cov)), position = position_dodge(width = 0.5), color = rgb(0.5, 0.5, 0.5)) +
     facet_grid(sex ~ .) +
-    scale_x_discrete(limits = c("GAGE4", "CT47A4", "OPN1LW", "SPANXB1", "CT45A5", "BPY2", "PRY", "CDY", "RBMY1A1", "TSPY" ))
-    labs(title = paste0(abbrev2spec(ispecies), " chromosomes X and Y, all individuals"), y = "coverage: mean across all individuals") +
+    scale_x_discrete(limits = c("GAGE4", "CT47A4", "OPN1LW", "SPANXB1", "CT45A5", "BPY2", "PRY", "CDY", "RBMY1A1", "TSPY" )) +
+    labs(title = paste0(abbrev2spec(ispecies), " chromosomes X and Y"),
+         subtitle="Comparison of artifical chromosomes",
+         y = "mean coverage across all individuals") +
     theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 
 
@@ -68,7 +70,7 @@ ggplot(together[together$species == ispecies,], aes(x = gene, y = mean_cov, fill
 
             #scale_x_discrete(limits = c("BPY2", "PRY", "DMD", "GAGE4", "CDY", "SPANXB1", "CT47A4", "CT45A5", "OPN1LW", "RBMY1A1", "TSPY")) +
             facet_wrap(~ sex) +
-            labs(title = paste0(abbrev2spec(ispecies), ", ", ichrom, " chromosome"), subtitle="Comparison of different artifical chromosomes", y = "coverage: mean across all individuals") + #,
+            labs(title = paste0(abbrev2spec(ispecies), ", ", ichrom, " chromosome"), subtitle="Comparison of artificial chromosomes", y = "coverage: mean across all individuals") + #,
             # x="Weather    stations", 
             # y="Accumulated Rainfall [mm]",
             # title="Rainfall",
