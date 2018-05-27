@@ -46,10 +46,10 @@ for(ichrom in unique(df$chrom)) {
     for (ispecies in unique(df$species)) {
         ggplot(df[df$chrom==ichrom & df$species==ispecies,], aes(x=gene, y=norm_count, color=sex)) +
             #geom_point(size=3) +
+            geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F, size = 0.2) +
             geom_jitter(width=0.15, height=0.00) +
             scale_y_continuous(breaks=pretty_breaks(n = 10), minor_breaks=pretty_breaks(n = 40)) +
             #expand_limits(y = 0) +
-            geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F) +
             #facet_wrap(~ ind) + 
             #scale_y_continuous(limits = c(0,max(df$))) +
             ggtitle(paste(ichrom, ": ", expand_species(ispecies), sep="")) +
@@ -67,9 +67,9 @@ for(ichrom in unique(df$chrom)) {
     for (igene in unique(df[df$chrom==ichrom,]$gene)) { # for each unique gene-name
         ggplot(df[df$chrom==ichrom & df$gene==igene,], aes(x=species, y=norm_count, color=sex)) +
             #geom_point(size=3) +
+            geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F, size = 0.2) +
             geom_jitter(width=0.1, height=0.00) +
             scale_y_continuous(breaks=pretty_breaks(n = 10), minor_breaks=pretty_breaks(n = 40)) +
-            geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F) +
             #scale_y_continuous(limits = c(0,max(df$))) +
             ggtitle(paste(ichrom, ": ", igene, sep="")) +
             labs(y=paste("number of copies"), x="species")
