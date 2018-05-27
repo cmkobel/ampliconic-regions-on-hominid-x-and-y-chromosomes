@@ -12,9 +12,18 @@ abbrev2spec = function(abbrev) {
     if (abbrev == "gorilla") return ("Gorilla")
     else if (abbrev == "chimp") return ("Chimpanzee")
 }
-    
+
+abbrev2gender = function(abbrev) {
+    if (abbrev == "F") return ("female")
+    else if (abbrev == "M") return ("male")
+}
+
 filtered_spsp = spsp_ac %>%
-    mutate(`artificial chromosome` = "species-specific")
+    mutate(`artificial_chromosome` = "species-specific") %>% 
+    mutate(gender = case_when(
+        sex == "F" ~ "female (XX)",
+        sex == "M" ~ "male (XY)"
+    ))
 
     
 filtered_human = human_ac %>% 
@@ -27,7 +36,7 @@ filtered_human = human_ac %>%
         gene == "26_0" ~ "CT45A5",
         gene == "27_0" ~ "SPANXB1",
         gene == "32_0" ~ "OPN1LW",
-        gene == "DMD" ~ "DMD",
+        gene == "DMD" ~ "DMD", # hvorfor er DMD ikke med??
         # Y chrom
         gene == "AMELY" ~ "AMELY",
         gene == "BPY2" ~ "BPY2",
@@ -37,9 +46,13 @@ filtered_human = human_ac %>%
         gene == "TSPY" ~ "TSPY"
         #gene == "chrY.background" ~ "chr. Y b.g."
     )) %>% na.omit() %>% 
+    mutate(gender = case_when(
+        sex == "F" ~ "female (XX)",
+        sex == "M" ~ "male (XY)"
+    )) %>%
     # kan man ikke bare bruge select til at udvælge rækker?
     # Fjern orangutanger!
-    mutate(`artificial chromosome` = "human")
+    mutate(`artificial_chromosome` = "human")
 
 # Det her kan sikkert også gøres med select i linjerne over.
 filtered_human = filtered_human[! (filtered_human$species == "gorilla" & filtered_human$chrom == "Y") # fjern gorilla Y
@@ -47,122 +60,79 @@ filtered_human = filtered_human[! (filtered_human$species == "gorilla" & filtere
                       & !(filtered_human$species == "gorilla" & filtered_human$gene == "SPANXB1" ),] # fjern spanxb1 fra gorilla
 
 
+# add the two cromosome methods
 together = rbind(filtered_human, filtered_spsp) %>% 
-    group_by(species, sex, chrom, gene, `artificial chromosome`) %>% 
+    group_by(species, gender, chrom, gene, `artificial_chromosome`) %>% 
     summarise(mean_cov = mean(count))
 
-# together[together$species == ispecies & together$`artificial chromosome` == "species-specific" & together$chrom == "Y",] %>% 
+# together[together$species == ispecies & together$`artificial_chromosome` == "species-specific" & together$chrom == "Y",] %>% 
 #     View()
 
-ispecies = "chimp"
-ggplot(together[together$species == ispecies,], aes(x = gene, y = mean_cov, fill = `artificial chromosome`)) +
+
+ggplot(together[together$species == "chimp",], aes(x = gene, y = mean_cov, fill = `artificial_chromosome`)) +
     geom_col(position = "dodge", width = 0.5) +
-    geom_text(aes(y = mean_cov + 3, label = round(mean_cov)), position = position_dodge(width = 0.5), color = rgb(0.5, 0.5, 0.5)) +
-    facet_grid(sex ~ .) +
-    scale_x_discrete(limits = c("GAGE4", "CT47A4", "OPN1LW", "SPANXB1", "CT45A5", "BPY2", "PRY", "CDY", "RBMY1A1", "TSPY" )) +
-    labs(title = paste0(abbrev2spec(ispecies), " chromosomes X and Y"),
+    geom_text(aes(y = mean_cov + 5, label = round(mean_cov)), position = position_dodge(width = 0.5), color = rgb(0.45, 0.45, 0.45), size = 2.7) +
+    facet_grid(gender ~ .) +
+    scale_x_discrete(limits = c("DMD", "GAGE4", "CT47A4", "OPN1LW", "SPANXB1", "CT45A5", "AMELY", "BPY2", "PRY", "CDY", "RBMY1A1", "TSPY")) +
+    labs(title = paste0("Chimpanzee X and Y-linked genes"),
          subtitle="Comparison of artifical chromosomes",
          y = "mean coverage across all individuals") +
-    theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+    theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+    ggsave(file = paste0("plots/compare/new/all_chimp.pdf"), width = 10, height = 5) 
 
+    
+ggplot(together[together$species == "gorilla",], aes(x = gene, y = mean_cov, fill = `artificial_chromosome`)) +
+    geom_col(position = "dodge", width = 0.5) +
+    geom_text(aes(y = mean_cov + 7, label = round(mean_cov)), position = position_dodge(width = 0.5), color = rgb(0.45, 0.45, 0.45), size = 2.7) +
+    facet_grid(gender ~ .) +
+    #scale_x_discrete(limits = c("DMD", "GAGE4", "CT47A4", "CT45A5",  "OPN1LW")) +
+    scale_x_discrete(limits = c("DMD", "GAGE4", "CT47A4", "OPN1LW", "CT45A5")) +
+    labs(title = paste0("Gorilla X-linked genes"),
+         subtitle="Comparison of artifical chromosomes",
+         y = "mean coverage across all individuals") +
+    theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+    ggsave(file = paste0("plots/compare/new/all_gorilla.pdf"), width = 5, height = 5) 
 
-
-
-            #scale_x_discrete(limits = c("BPY2", "PRY", "DMD", "GAGE4", "CDY", "SPANXB1", "CT47A4", "CT45A5", "OPN1LW", "RBMY1A1", "TSPY")) +
-            facet_wrap(~ sex) +
-            labs(title = paste0(abbrev2spec(ispecies), ", ", ichrom, " chromosome"), subtitle="Comparison of artificial chromosomes", y = "coverage: mean across all individuals") + #,
-            # x="Weather    stations", 
-            # y="Accumulated Rainfall [mm]",
-            # title="Rainfall",
-            #xlab("gene") +
-            #ylab("coverage: mean across all individuals") + 
-            #ggtitle(paste0(abbrev2spec(ispecies), ", ", ichrom, " chromosome: comparison of different artifical chromosomes")) +
-            theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1)) +
-            ggsave(paste0("plots/compare/", ispecies, "_", ichrom, ".pdf"), width = 5, height = 4)
-        # find den samme bredde som de andre figurer har, og brug den til at exportere med. Indstil dodgewidth so det ser sejt ud.
-    }
+# In chimpanzee, the mean of the pairwise difference for each individual is
+library(tidyr)
+pairwise_stat = function(ispec, ichrom, isex) {
+    pairwise_dist = rbind(filtered_human, filtered_spsp)[-1] %>% 
+        filter(species == ispec,
+               chrom == ichrom,
+               sex == isex) %>% 
+        group_by(ind, gene, count, `artificial_chromosome`) %>%
+        summarise() %>% 
+        spread(artificial_chromosome, count) %>% 
+        mutate(abs_diff = `species-specific` - human,
+               rel_diff = `species-specific` / human)
+    return(pairwise_dist)
 }
 
+mean(pairwise_stat("chimp", "Y", "F")$abs_diff)
+mean(pairwise_stat("chimp", "X", "F")$rel_diff)
 
-# 
-# ggplot(box_together[box_together$species == "chimp",]) + 
-#     geom_boxplot(aes(x = gene, y = count, color = `artificial chromosome`)) + 
-#     scale_x_discrete(limits = c("AMELY", "BPY2", "PRY", "DMD", "GAGE4", "CDY", "SPANXB1", "CT47A4", "CT45A5", "OPN1LW", "RBMY1A1", "TSPY")) +
-#     xlab("gene") +
-#     ylab("coverage: mean across all individuals") + 
-#     ggtitle("Comparison of methods (Chimpanzee)") + 
-#     facet_wrap(~ sex) +
-#     theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1))#, hjust=1, size=3)) +
-# 
-# 
-# ggplot(box_together[box_together$species == "gorilla",]) + 
-#     #geom_boxplot(aes(x = gene, y = count, color = `artificial chromosome`)) + 
-#     geom_line(aes(x = gene, y = count)) +
-#     geom_point(aes(x = gene, y = count, color = `artificial chromosome`)) + 
-#     xlab("gene") +
-#     ylab("coverage: mean across all individuals") + 
-#     ggtitle("Comparison of methods (Gorilla)") + 
-#     facet_wrap(~ sex) +
-#     theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1))#, hjust=1, size=3))
+stats = tibble(species = c("chimp", "chimp", "chimp", "chimp", "gorilla", "gorilla"),
+               sex = c("F", "M", "F", "M", "F", "M"),
+               chromosome = c("X", "X", "Y", "Y", "X", "X"),
+               `rel diff` = c(mean(pairwise_stat("chimp", "X", "F")$rel_diff), 
+                              mean(pairwise_stat("chimp", "X", "M")$rel_diff), 
+                              mean(pairwise_stat("chimp", "Y", "F")$rel_diff), 
+                              mean(pairwise_stat("chimp", "Y", "M")$rel_diff), 
+                              mean(pairwise_stat("gorilla", "X", "F")$rel_diff), 
+                              mean(pairwise_stat("gorilla", "X", "M")$rel_diff)),
+               `abs diff` = c(mean(pairwise_stat("chimp", "X", "F")$abs_diff),
+                              mean(pairwise_stat("chimp", "X", "M")$abs_diff),
+                              mean(pairwise_stat("chimp", "Y", "F")$abs_diff),
+                              mean(pairwise_stat("chimp", "Y", "M")$abs_diff),
+                              mean(pairwise_stat("gorilla", "X", "F")$abs_diff),
+                              mean(pairwise_stat("gorilla", "X", "M")$abs_diff)))
+# Det giver ikke mening at indsætte det absolutte forskel, da den ikke tager højde for     
 
 
-# Hvad fanden er det her til?
-# box_together[box_together$`artificial chromosome` == "species specific",] %>% 
-#     group_by(gene, `artificial chromosome`) %>% 
-#     summarise(mean = mean(count)) %>% 
-#     View()
-
-# Because the variance is roughly proportional with the copy number, I decided to only plot the means
-# I selected the mean, because the distributions weren't far off
-# Jeg vil gerne dele det op i arter med facetter af sex, men med gennemsnit i stedet for 
-
-# lav df til at plotte means kun:
-together = box_together %>% 
-    group_by(species, sex, chrom, gene, `artificial chromosome`) %>%
-    summarise(mean_count = mean(count))
-
-# animal = "chimp"
-# ggplot(box_together_mean[box_together_mean$species == animal,], aes(x = gene, y = mean_count)) + 
-#     geom_line(color = "grey") +
-#     geom_point(aes(color = `artificial chromosome`), position=position_dodge(width = .3), size = 3.3) +# , height = 0, width = 1) +
-#     #scale_x_discrete(limits = c("BPY2", "AMELY", "PRY", "DMD", "GAGE4", "CDY", "SPANXB1", "CT47A4", "CT45A5", "OPN1LW", "RBMY1A1", "TSPY")) +
-#     facet_wrap(~ sex) +
-#     xlab("gene") +
-#     ylab("coverage: mean across all individuals") + 
-#     ggtitle(paste("Comparison of methods,", animal)) +
-#     theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1))
-# # find den samme bredde som de andre figurer har, og brug den til at exportere med. Indstil dodgewidth so det ser sejt ud.
-
-abbrev2spec = function(abbrev) {
-    if (abbrev == "gorilla") return ("Gorilla")
-    else if (abbrev == "chimp") return ("Chimpanzee")
-}
+pairwise_mean_across = pairwise_dist %>% 
+    group_by(species) %>% 
+    summarise(mean = mean(dist))
 
 
 
-# maybe bars are better?
-# det her er super.
-ispecies = "chimp"
-ichrom = "Y"
-
-for (ispecies in c("chimp", "gorilla")) {
-    for (ichrom in c("X", "Y")) {
-        ggplot(together[together$species == ispecies & together$chrom == ichrom & !(together$species == "gorilla" & together$gene == "SPANXB1"),], aes(x = gene, y = mean_count)) + 
-            geom_bar(aes(fill = `artificial chromosome`, width = .5), stat = "identity", position = "dodge") +
-            #scale_x_discrete(limits = c("BPY2", "PRY", "DMD", "GAGE4", "CDY", "SPANXB1", "CT47A4", "CT45A5", "OPN1LW", "RBMY1A1", "TSPY")) +
-            facet_wrap(~ sex) +
-            labs(title = paste0(abbrev2spec(ispecies), ", ", ichrom, " chromosome"), subtitle="Comparison of different artifical chromosomes", y = "coverage: mean across all individuals") + #,
-                # x="Weather    stations", 
-                # y="Accumulated Rainfall [mm]",
-                # title="Rainfall",
-            #xlab("gene") +
-            #ylab("coverage: mean across all individuals") + 
-            #ggtitle(paste0(abbrev2spec(ispecies), ", ", ichrom, " chromosome: comparison of different artifical chromosomes")) +
-            theme(title = element_text(size = 12), axis.text.x = element_text(angle = 90, hjust = 1)) +
-            ggsave(paste0("plots/compare/", ispecies, "_", ichrom, ".pdf"), width = 5, height = 4)
-        # find den samme bredde som de andre figurer har, og brug den til at exportere med. Indstil dodgewidth so det ser sejt ud.
-    }
-}
-
-# Og så en overall.
 

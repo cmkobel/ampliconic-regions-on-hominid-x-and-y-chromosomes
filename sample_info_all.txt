@@ -1,0 +1,13 @@
+Name	Species	Sex
+Banjo	gorilla	M
+Masala	orang	L
+Moni	orang	F
+Suma	orang	F
+Buschi	orang	M
+Carl	chimp	M
+Carolina	chimp	F
+Frits	chimp	M
+Simliki	chimp	F
+Mawenzi	gorilla	F
+Mutasi	gorilla	F
+Mimi	gorilla	F

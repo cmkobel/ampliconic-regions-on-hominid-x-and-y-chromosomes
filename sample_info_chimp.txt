@@ -1,0 +1,5 @@
+Name	Species	Sex
+Carl	chimp	M
+Carolina	chimp	F
+Frits	chimp	M
+Simliki	chimp	F
