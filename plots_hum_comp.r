@@ -95,6 +95,10 @@ y_human = y_human %>%
 #validate sex
 table(as.factor(y_human$AR), as.factor(y_human$gene))
 
+# survey BPY2
+y_human %>% 
+    filter(gene == "BPY2" & sex == "M") %>% 
+    View()
 
 # overview
 for(i in 1:1) {
