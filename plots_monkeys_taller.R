@@ -2,7 +2,7 @@ library(readr)
 library(tidyverse)
 
 
-setwd("/Volumes/GenomeDK/simons/faststorage/people/carl/coverage/plots/pdf2")
+setwd("plots/pdf2")
 #getwd()
 #setwd("..")
 df <- read_csv("../full.csv")[,-1]
@@ -79,3 +79,8 @@ for(ichrom in unique(df$chrom)) {
     }
 }
 
+stats = df %>% 
+    group_by(species, chrom, sex, gene) %>% 
+    summarise(min = min(norm_count), median = median(norm_count), max = max(norm_count), sd = sd(norm_count))
+
+#sort: median, sex, chrom, species
