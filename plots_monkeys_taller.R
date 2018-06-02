@@ -81,6 +81,16 @@ for(ichrom in unique(df$chrom)) {
 
 stats = df %>% 
     group_by(species, chrom, sex, gene) %>% 
-    summarise(min = min(norm_count), median = median(norm_count), max = max(norm_count), sd = sd(norm_count))
+    summarise(min = round(min(norm_count), 2),
+              median = round(median(norm_count), 2),
+              max = round(max(norm_count), 2),
+              sd = round(sd(norm_count), 2),
+              n_ind.s = length(norm_count)) %>% 
+    arrange(species, chrom, sex, desc(median))
+
+library(readr)
+write_excel_csv(stats, "stats.csv", na = "NA", append = FALSE)
+
+
 
 #sort: median, sex, chrom, species
