@@ -23,7 +23,7 @@ x_human = x_human %>%
 #validate sex
 table(as.factor(x_human$sex), as.factor(x_human$sexchroms))
 
-
+cutoff <- data.frame( x = c(-Inf, Inf), y = 50, cutoff = factor(50))
 # overview
 for(i in 1:1) {
     ggplot(x_human[! is.na(x_human$gene) & ! is.na(x_human$sex),], aes(x=gene, y=normalized_cov, color=sex)) +
@@ -35,7 +35,7 @@ for(i in 1:1) {
         #scale_y_continuous(limits = c(0,max(df$))) +
         ggtitle("X: Human") +
         labs(y=paste("number of copies"), x="gene") +
-        theme(axis.text.x = element_text(angle=90, hjust=1))
+        theme(axis.text.x = element_text(angle=90, hjust=1, vjust = 0.5))
     
     ggplot2::ggsave("human/X_human.pdf", width=2.8, height=5)
     print("x human overview")
@@ -48,7 +48,7 @@ for (igene in unique(na.omit(x_human$gene))) {
     ggplot(na.omit(x_human[x_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
         #geom_point(size=3) +
         geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F, size = 0.2) +
-        geom_jitter(width=0.1, height=0.00, size = 0.25) +
+        geom_jitter(width=0.1, height=0.00, size = 0.04) +
         scale_y_continuous(breaks=pretty_breaks(n = 10), minor_breaks=pretty_breaks(n = 40)) +
         #scale_y_continuous(limits = c(0,max(df$))) +
         ggtitle(paste("X: ", igene, sep="")) +
@@ -102,18 +102,18 @@ y_human %>%
 
 # overview
 for(i in 1:1) {
-    ggplot(y_human[! is.na(y_human$gene),], aes(x=gene, y=normalized_cov, color=sex)) +
+    ggplot(y_human[! is.na(y_human$gene) & y_human$gene != "TSPY" & y_human$sex == "M",], aes(x=gene, y=normalized_cov)) +
         #geom_point(size=3) +
         geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F, size = 0.2) +
-        geom_jitter(width=0.15, height=0.00, size = 0.04) +
+        geom_jitter(width=0.15, height=0.00, size = 0.04, color = "#00BFC4") +
         scale_y_continuous(breaks=pretty_breaks(n = 10), minor_breaks=pretty_breaks(n = 40)) +
         #coord_trans(y="log10") +
         #facet_wrap(~ ind) + 
         #scale_y_continuous(limits = c(0,max(df$))) +
         ggtitle("Y: Human") +
         labs(y=paste("number of copies"), x="gene") +
-        theme(axis.text.x = element_text(angle=90, hjust=1)) 
-    ggplot2::ggsave("human/Y_human.pdf", width=2.8, height=5)
+        theme(axis.text.x = element_text(angle=90, hjust=1, vjust = 0.5)) 
+    ggplot2::ggsave("human/Y_human.pdf", width=2.1, height=5)
     print("y human overview")
 }
 
@@ -121,15 +121,16 @@ for(i in 1:1) {
 
 # jitter
 for (igene in unique(na.omit(y_human$gene))) {
-    ggplot(na.omit(y_human[y_human$gene == igene,]), aes(x=species, y=normalized_cov, color=sex)) +
+    ggplot(na.omit(y_human[y_human$gene == igene & y_human$sex == "M",]), aes(x=species, y=normalized_cov)) +
         #geom_point(size=3) +
         geom_hline(aes(yintercept=1, linetype=cutoff), data=cutoff, show.legend=F, size = 0.2) +
-        geom_jitter(width=0.1, height=0.00, size = 0.25) +
+        geom_jitter(width=0.15, height=0.00, size = 0.04, color = "#00BFC4") +
         scale_y_continuous(breaks=pretty_breaks(n = 10), minor_breaks=pretty_breaks(n = 40)) +
         #scale_y_continuous(limits = c(0,max(df$))) +
         ggtitle(paste("Y: ", igene, sep="")) +
-        labs(y=paste("number of copies"), x="species")
-    ggplot2::ggsave(paste("human/Y_human_", igene, "_jit.pdf", sep=""), width=2, height=5)
+        labs(y=paste("number of copies"), x="species") +
+    theme(axis.text.x = element_text(angle=90, hjust=1, vjust = 0.5)) 
+    ggplot2::ggsave(paste("human/Y_human_", igene, "_jit.pdf", sep=""), width=0.9, height=5)
     print(igene)
 }
 
@@ -160,14 +161,14 @@ y_human = y_human %>%
 df = rbind(x_human, y_human)
 
 
-stats = df %>% 
+hum_stats = df %>% 
     group_by(species, chrom, sex, gene) %>% 
     summarise(min = round(min(normalized_cov), 2),
               median = round(median(normalized_cov), 2),
               max = round(max(normalized_cov), 2),
               sd = round(sd(normalized_cov), 2),
               n_ind.s = length(normalized_cov)) %>% 
-    arrange(species, chrom, sex, desc(median))
+    arrange(species, chrom, sex, gene)
 
 library(readr)
-write_excel_csv(stats, "stats_hum.csv", na = "NA", append = FALSE)
+write_excel_csv(hum_stats, "stats_hum.csv", na = "NA", append = FALSE)
