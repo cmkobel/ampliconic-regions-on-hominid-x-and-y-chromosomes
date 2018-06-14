@@ -149,5 +149,25 @@ for (igene in unique(na.omit(y_human$gene))) {
 
 
 
+x_human = x_human %>% 
+    mutate(chrom = 'X') %>%
+    na.omit()
+
+y_human = y_human %>%
+    mutate(chrom = 'Y') %>% 
+    na.omit()
+
+df = rbind(x_human, y_human)
 
 
+stats = df %>% 
+    group_by(species, chrom, sex, gene) %>% 
+    summarise(min = round(min(normalized_cov), 2),
+              median = round(median(normalized_cov), 2),
+              max = round(max(normalized_cov), 2),
+              sd = round(sd(normalized_cov), 2),
+              n_ind.s = length(normalized_cov)) %>% 
+    arrange(species, chrom, sex, desc(median))
+
+library(readr)
+write_excel_csv(stats, "stats_hum.csv", na = "NA", append = FALSE)
