@@ -6,7 +6,7 @@ Please read the latest `.pdf` file in the `text/` directory, for a complete walk
 ***
 ## Short  description of files
 
-The files `workflow.py` `workflow_templates.py` depends on [gwf-org](http://gwf.readthedocs.io/en/latest/index.html) to run. The files depict the pipeline where genome reads are mapped to several artificial chromosomes. The copy number variation is output, merged with `merge.py` and the data is subsequently visualized with the various `plots*.R`.
+The files `workflow.py` `workflow_templates.py` depends on [gwf-org](http://gwf.readthedocs.io/en/latest/index.html) to run. The files depict the pipeline where genome reads are mapped to several artificial chromosomes. The copy number variation is output, merged with `merge.py` and the data is subsequently visualized with the various `plots*.R` files.
 
 All diagrams reside in `plots/`.
 
