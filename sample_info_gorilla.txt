@@ -1,5 +1,0 @@
-Name	Species	Sex
-Banjo	gorilla	M
-Mawenzi	gorilla	F
-Mutasi	gorilla	F
-Mimi	gorilla	F
